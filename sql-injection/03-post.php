@@ -1,15 +1,20 @@
 <?php
 
-// WARNING: be advise this code is faulty and shouldn't be used but learning purpose
-// It contains:
+////////////////////////////////////////////////////////////////////////////////
 //
-// * SQL injections
-// * Header injection
-// * is prone to DDOS
-// * data disclosure
-// * a business logic error
-// * a control flow logic error
+// WARNING: be advise not to use this code in production
+//			This code is faulty and shouldn't be used but learning purpose.
 //
+//			It contains:
+//
+//				* SQL injections
+// 				* Header injection
+// 				* is prone to DDOS
+// 				* data disclosure
+// 				* many business logic errors
+// 				* many control flow logic errors
+//
+////////////////////////////////////////////////////////////////////////////////
 
 ini_set('html_errors', 'Off');
 header('Content-type: application/json');
