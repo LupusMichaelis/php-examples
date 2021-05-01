@@ -53,10 +53,18 @@ $result = [];
 if(isset($_POST['firstname']) && isset($_POST['surname']))
 {
 	extract($_POST);
-	$success = insert_vilain($firstname, $surname);
-	header('HTTP/1.1 201 Created');
-	header('Location: ' . $_SERVER['PHP_SELF'] . "?firstname=$firstname");
-	die();
+	$result = insert_vilain($firstname, $surname);
+	if(true === $result)
+	{
+		header('HTTP/1.1 201 Created');
+		header('Location: ' . $_SERVER['PHP_SELF'] . "?firstname=$firstname");
+		die();
+	}
+	else
+	{
+		header('HTTP/1.1 500 Internal Server Error');
+		die(json_encode($result));
+	}
 }
 elseif(isset($_GET['firstname']))
 {
@@ -64,7 +72,7 @@ elseif(isset($_GET['firstname']))
 	$result[$firstname] = get_vilains_by_firstname($firstname);
 	$result = json_encode($result);
 	empty($result[$firstname])
-		and header('HTTP/1.1 404 Not found');
+		and header('HTTP/1.1 404 Not Found');
 	header('Content-Length: ' . strlen($result));
 	die($result);
 }
