@@ -37,7 +37,16 @@ function get_vilains_by_firstname($firstname)
 	$select = "select * from vilains where firstname = '$firstname'";
 	$result = $con->query($select);
 
-	return false === $result ? $con->error : $result->fetch_all();
+	return false === $result ? $con->error : $result->fetch_assoc();
+}
+
+function delete_vilains_by_firstname($firstname)
+{
+	global $con;
+	$delete = "delete from vilains where firstname = '$firstname'";
+	$result = $con->query($delete);
+
+	return false === $result ? $con->error : true;
 }
 
 function insert_vilain($firstname, $surname)
@@ -69,12 +78,35 @@ if(isset($_POST['firstname']) && isset($_POST['surname']))
 elseif(isset($_GET['firstname']))
 {
 	extract($_GET);
-	$result[$firstname] = get_vilains_by_firstname($firstname);
-	$result = json_encode($result);
-	empty($result[$firstname])
-		and header('HTTP/1.1 404 Not Found');
-	header('Content-Length: ' . strlen($result));
-	die($result);
+
+	if('DELETE' === $_SERVER['REQUEST_METHOD'])
+	{
+		$result = delete_vilains_by_firstname($firstname);
+		if(true === $result)
+		{
+			header('HTTP/1.1 204 No Content');
+			die();
+		}
+		elseif(empty($result))
+		{
+			header('HTTP/1.1 404 Not Found');
+			die('{"firstname": "'. $firstname . '"}');
+		}
+		else
+		{
+			header('HTTP/1.1 500 Internal Server Error');
+			die(json_encode($result));
+		}
+	}
+	else
+	{
+		$result[$firstname] = get_vilains_by_firstname($firstname);
+		$result = json_encode($result);
+		empty($result[$firstname])
+			and header('HTTP/1.1 404 Not Found');
+		header('Content-Length: ' . strlen($result));
+		die($result);
+	}
 }
 else
 {
