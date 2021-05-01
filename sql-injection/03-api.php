@@ -8,6 +8,7 @@
 //			It contains:
 //
 //				* SQL injections
+//				* XSS
 // 				* Header injection
 // 				* is prone to DDOS
 // 				* data disclosure
@@ -25,41 +26,6 @@ if(false === $con->query($create))
 {
 	$result = ['error' => $con->error];
 	$result = json_encode($result);
-}
-
-function get_all_vilains()
-{
-	global $con;
-	$select = 'select * from vilains';
-	$result = $con->query($select);
-
-	return false === $result ? $con->error : $result->fetch_all();
-}
-
-function get_vilains_by_firstname($firstname)
-{
-	global $con;
-	$select = "select * from vilains where firstname = '$firstname'";
-	$result = $con->query($select);
-
-	return false === $result ? $con->error : $result->fetch_assoc();
-}
-
-function delete_vilains_by_firstname($firstname)
-{
-	global $con;
-	$delete = "delete from vilains where firstname = '$firstname'";
-	$result = $con->query($delete);
-
-	return false === $result ? $con->error : true;
-}
-
-function insert_vilain($firstname, $surname)
-{
-	global $con;
-	$insert = "insert into vilains (firstname, surname) values ('$firstname', '$surname')";
-
-	return $con->query($insert) ? true : $con->error;
 }
 
 $result = [];
@@ -127,3 +93,38 @@ if(false === $result)
 
 header('Content-Length: ' . strlen($result));
 die($result);
+
+function get_all_vilains()
+{
+	global $con;
+	$select = 'select * from vilains';
+	$result = $con->query($select);
+
+	return false === $result ? $con->error : $result->fetch_all();
+}
+
+function get_vilains_by_firstname($firstname)
+{
+	global $con;
+	$select = "select * from vilains where firstname = '$firstname'";
+	$result = $con->query($select);
+
+	return false === $result ? $con->error : $result->fetch_assoc();
+}
+
+function delete_vilains_by_firstname($firstname)
+{
+	global $con;
+	$delete = "delete from vilains where firstname = '$firstname'";
+	$result = $con->query($delete);
+
+	return false === $result ? $con->error : true;
+}
+
+function insert_vilain($firstname, $surname)
+{
+	global $con;
+	$insert = "insert into vilains (firstname, surname) values ('$firstname', '$surname')";
+
+	return $con->query($insert) ? true : $con->error;
+}
